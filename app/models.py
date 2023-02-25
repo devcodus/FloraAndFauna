@@ -70,7 +70,7 @@ class Post(db.Model):
     caption = db.Column(db.String(1000))
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    florafauna_id = db.Column(db.Integer, db.ForeignKey('florafauna.id'), nullable=False)
+    florafauna_id = db.Column(db.Integer, db.ForeignKey('florafauna.id'), nullable=True)## change nullable to false once pets are integrated?
     likes = db.relationship("Likes", lazy=True, cascade="all, delete")
 
     def __init__(self, title, img_url, caption, user_id):
