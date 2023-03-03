@@ -19,7 +19,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(45), nullable=False, unique=True)
     email = db.Column(db.String(150), nullable=False, unique=True)
     password = db.Column(db.String, nullable=False)
-    apitoken = db.Column(db.String)
+    # apitoken = db.Column(db.String)
     post = db.relationship("Post", backref='author', lazy=True)
     likes = db.relationship("Likes", lazy=True, cascade="all, delete")
     followed = db.relationship("User",
@@ -31,11 +31,11 @@ class User(db.Model, UserMixin):
     )
 
 
-    def __init__(self, username, email, password):
+    def __init__(self, username, email, password): ## REFER TO 1/25 OR 2/8 LECTURE (TOKEN AUTH)
         self.username = username
         self.email = email
         self.password = generate_password_hash(password)
-        self.apitoken = token_hex(16)
+        # self.apitoken = token_hex(16) ## ASK SHOHA IF THIS WAS FOR LOGIN/AUTH OR WHAT?
 
     def saveToDB(self):
         db.session.add(self)
@@ -53,7 +53,7 @@ class User(db.Model, UserMixin):
             'id': self.id,
             'username' : self.username,
             'email' : self.email,
-            'apitoken' : self.apitoken
+            # 'apitoken' : self.apitoken
         }
 
 class FloraFauna(db.Model):
@@ -120,37 +120,4 @@ class Likes(db.Model):
 
 
 
-
-class Product(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    product_name = db.Column(db.String(100), nullable=False)
-    img_url = db.Column(db.String, nullable=False)
-    description = db.Column(db.String(1000))
-    price = db.Column(db.Numeric(10,2))
-    date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
-    
-
-    def __init__(self, product_name, img_url, description, price):
-        self.product_name = product_name
-        self.img_url = img_url
-        self.description = description
-        self.price = price
-
-    def saveToDB(self):
-        db.session.add(self)
-        db.session.commit()
-    def saveChanges(self):
-        db.session.commit()
-    def deleteFromDB(self):
-        db.session.delete(self)
-        db.session.commit()
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'product_name': self.product_name,
-            'img_url': self.img_url,
-            'description': self.description,
-            'date_created': self.date_created,
-            'price': self.price
-        }
 

@@ -9,20 +9,8 @@ import os
 
 @app.route('/')
 def homePage():
-    people = ['name', "Brandt", "Aubrey","Nicole"]
-    text = "SENDING THIS FROM PYTHON!!!"
-    return render_template('index.html', people = people, my_text = text )
-
-
-@app.route('/contact')
-def contactPage():
-    users = User.query.all()
-    if current_user.is_authenticated:
-        who_i_am_following = {u.id for u in current_user.followed.all()}
-        for user in users:
-            if user.id in who_i_am_following:
-                user.following = True
-    return render_template('contact.html', users=users)
+    people = ["Tito", "Jasper", "Abby"]
+    return render_template('index.html', people = people)
 
 
 
@@ -38,6 +26,8 @@ def createPost():
             
             post = Post(title, img_url, caption, current_user.id)
             post.saveToDB()
+
+        return redirect(url_for('getPosts')) 
     return render_template('createpost.html', form = form)
 
 

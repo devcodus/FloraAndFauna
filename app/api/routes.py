@@ -83,9 +83,10 @@ def deletePostAPI(user, post_id):
         'message': 'Succesfully deleted post!'
     }
 
-@api.route('/api/posts/update/<post_id>', methods = ["POST"])
-@token_auth_required
-def updatePost(user, post_id):
+@api.route('/api/posts/update/<int:post_id>', methods = ["POST"]) ##COMMENTED OUT TOKEN_AUTH AND ALL MENTIONS OF USER
+# @token_auth_required 
+@cross_origin()
+def updatePost(post_id):
     data = request.json
 
     title = data['title']
@@ -97,11 +98,11 @@ def updatePost(user, post_id):
     #### we will cover this in BASIC/TOKEN auth
 
     post = Post.query.get(post_id)
-    if user.id != post.author.id:
-        return {
-            'status': 'not ok',
-            'message': 'You cannot update another users Post'
-        }
+    # if user.id != post.author.id:
+    #     return {
+    #         'status': 'not ok',
+    #         'message': 'You cannot update another users Post'
+    #     }
 
     post.title = title
     post.caption = caption
